@@ -1,11 +1,16 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import connectDatabase from "./config/connectToDB";
 import { corsOptions } from "./config/corsOptions";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
 import productsRouter from "./routes/products.route";
 import ordersRouter from "./routes/orders.routes";
+dotenv.config();
 const app = express();
+connectDatabase();
 const PORT: string = process.env.PORT || "8080";
 
 // loging incoming requests
@@ -44,4 +49,8 @@ app.use("/orders", ordersRouter);
 
 // error handler
 app.use(errorHandler);
-app.listen(PORT, () => console.log(`server is listening on Port : ${PORT}`));
+
+mongoose.connection.once("open", () => {
+  console.log("connected to database");
+  app.listen(PORT, () => console.log(`server is listening on Port : ${PORT}`));
+});
