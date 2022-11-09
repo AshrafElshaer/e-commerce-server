@@ -4,11 +4,11 @@ import { allowedOrigins } from "./allowedOrgins";
 
 export const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    if (allowedOrigins.indexOf(origin as string) !== -1 || !origin) {
+    // if (allowedOrigins.indexOf(origin as string) !== -1 || !origin) {
       callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
+    // } else {
+    //   callback(new Error("Not allowed by CORS"));
+    // }
   },
   optionsSuccessStatus: 200,
 };
