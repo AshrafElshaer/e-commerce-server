@@ -4,6 +4,7 @@ import { corsOptions } from "./config/corsOptions";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
 import productsRouter from "./routes/products.route";
+import ordersRouter from "./routes/orders.routes";
 const app = express();
 const PORT: string = process.env.PORT || "8080";
 
@@ -30,14 +31,8 @@ app.get("/", (req, res) => {
 //  Products Routes
 app.use("/products", productsRouter);
 
-
-//  Orders Routes
-
-// /order GET all
-// /order POST add new order
-// /order/:id GET order by id
-// /order/:id PUT order by id
-// /order/:id DELETE order by id
+// Orders Routes
+app.use("/orders", ordersRouter);
 
 // Users Routes
 
