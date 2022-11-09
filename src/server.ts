@@ -3,9 +3,9 @@ import cors from "cors";
 import { corsOptions } from "./config/corsOptions";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
+import productsRouter from "./routes/products.route";
 const app = express();
 const PORT: string = process.env.PORT || "8080";
-
 
 // loging incoming requests
 app.use(logger);
@@ -27,6 +27,25 @@ app.get("/", (req, res) => {
   res.send("hello from server");
 });
 
+//  Products Routes
+app.use("/products", productsRouter);
+
+
+//  Orders Routes
+
+// /order GET all
+// /order POST add new order
+// /order/:id GET order by id
+// /order/:id PUT order by id
+// /order/:id DELETE order by id
+
+// Users Routes
+
+// /users GET all users
+// /users POST add new user
+// /users/:id GET user by id
+// /users/:id PUT user by id
+// /users/:id DELETE user by id
 
 // error handler
 app.use(errorHandler);
