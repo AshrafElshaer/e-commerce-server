@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import connectDatabase from "./config/connectToDB";
 import { corsOptions } from "./config/corsOptions";
+import { credentials } from "./config/credentials";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
-import productsRouter from "./routes/products.route";
+import productsRouter from "./routes/products.routes";
 import ordersRouter from "./routes/orders.routes";
+import usersRouter from "./routes/users.routes";
+import authRouter from "./routes/auth.routes";
 dotenv.config();
 const app = express();
 connectDatabase();
@@ -22,6 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 // built-in middleware for json
 app.use(express.json());
 
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
@@ -33,6 +40,9 @@ app.get("/", (req, res) => {
   res.send("hello from server");
 });
 
+// Auth Routes
+app.use("/auth", authRouter);
+
 //  Products Routes
 app.use("/products", productsRouter);
 
@@ -40,12 +50,7 @@ app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 
 // Users Routes
-
-// /users GET all users
-// /users POST add new user
-// /users/:id GET user by id
-// /users/:id PUT user by id
-// /users/:id DELETE user by id
+app.use("/users", usersRouter);
 
 // error handler
 app.use(errorHandler);
