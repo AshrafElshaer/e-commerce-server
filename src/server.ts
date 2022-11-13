@@ -2,19 +2,23 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cookieParser from 'cookie-parser'
 import connectDatabase from "./config/connectToDB";
 import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./config/credentials";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
-import productsRouter from "./routes/products.routes";
-import ordersRouter from "./routes/orders.routes";
-import usersRouter from "./routes/users.routes";
-import authRouter from "./routes/auth.routes";
+import {
+  authRouter,
+  usersRouter,
+  ordersRouter,
+  productsRouter,
+} from "./routes";
+
 dotenv.config();
 const app = express();
 connectDatabase();
-const PORT: string = process.env.PORT || "8080";
+const PORT = 4000;
 
 // loging incoming requests
 app.use(logger);
@@ -33,10 +37,9 @@ app.use(credentials);
 app.use(cors(corsOptions));
 
 //middleware for cookies
-// app.use(cookieParser());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  console.log(req.headers.origin);
   res.send("hello from server");
 });
 
@@ -57,5 +60,5 @@ app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   console.log("connected to database");
-  app.listen(PORT, () => console.log(`server is listening on Port : ${PORT}`));
+  app.listen(PORT, () => console.log(`server is listening on : ${PORT}`));
 });

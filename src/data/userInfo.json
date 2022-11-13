@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "createdAt": "date",
     "name": "name",
     "email": "email address",
@@ -11,16 +10,6 @@
       "suite": "Apt. 556",
       "city": "Gwenborough",
       "zipcode": "92998-3874"
-    },
-    "orders": [
-      {
-        "orderId": "orderId",
-        "createdAt": "date",
-        "orderType": "pick up / delivery",
-        "items": [],
-        "status": "pending",
-        "total": "total"
-      }
-    ]
+    }
   }
 ]
