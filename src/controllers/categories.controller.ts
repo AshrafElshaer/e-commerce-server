@@ -37,9 +37,17 @@ export const getCategory = async (req: Request, res: Response) => {
 // POST /categories
 export const createCategory = async (req: Request, res: Response) => {
   const category = req.body;
-  if (!category.category || !category.categoryImage)
-    return res.status(404).json({ messgae: "All fields are required" });
+  // if (!category.category || !category.categoryImage)
+  //   return res.status(404).json({ messgae: "All fields are required" });
   try {
+    const foundCategory = await CategoriesModel.findOne({
+      category: category.category,
+    })
+      .lean()
+      .exec();
+
+    if(foundCategory) return res.status(400).json({message : `Category ${category.category} already exists`})
+
     const result = await CategoriesModel.create(category);
     res.status(201).json(result);
   } catch (error: any) {
@@ -54,10 +62,11 @@ export const updateCategory = async (req: Request, res: Response) => {
     const foundCategory = await CategoriesModel.findOne({
       category: categoryName,
     }).exec();
+
     if (!foundCategory)
       return res
         .status(404)
-        .json({ message: `Category : ${category} not found` });
+        .json({ message: `Category : ${categoryName} not found` });
     foundCategory.category = category;
     foundCategory.categoryImage = categoryImage;
 

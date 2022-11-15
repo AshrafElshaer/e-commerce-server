@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-const id = new mongoose.Types.ObjectId();
+
 
 export type TProduct = {
   _id: mongoose.Types.ObjectId;
@@ -23,10 +23,6 @@ export type TProduct = {
   sold: number;
 };
 export const productsSchema = new Schema({
-  _id: {
-    type: mongoose.Types.ObjectId,
-    default: id,
-  },
   slug: {
     type: String,
     required: true,

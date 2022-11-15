@@ -11,10 +11,6 @@ export const loginUser = (req: Request, res: Response) => {
 // POST /register
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password, phone, address } = req.body;
-
-  if (!name || !email || !password || !phone || !address)
-    return res.status(400).json({ message: "All fields are required" });
-
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = {
     name,

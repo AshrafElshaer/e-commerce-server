@@ -14,14 +14,9 @@ export const getAllOrders = async (req: Request, res: Response) => {
 
 // /order POST add new order
 export const createOrder = async (req: Request, res: Response) => {
-  const newOrder = {
-    items: req.body.items,
-    customerId: req.body.customerId,
-    total: req.body.total,
-  };
-
+  const newOrder = req.body;
   try {
-    const user = await UserModel.findById(req.body.customerId);
+    const user = await UserModel.findById(newOrder.customerId);
     const result = await OrdersModel.create(newOrder);
     user?.orders.push(result._id.toString());
     user?.save();
@@ -36,11 +31,11 @@ export const getOrder = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const foundOrder = await OrdersModel.findById(id);
-    res.json(foundOrder);
     if (!foundOrder)
       return res
         .status(404)
         .json({ message: `Order was not found  id : ${id}` });
+    res.json(foundOrder);
   } catch (error: any) {
     res.json({ messgae: error.message });
   }
@@ -62,11 +57,9 @@ export const deleteOrder = async (req: Request, res: Response) => {
     if (!foundOrder)
       return res.status(404).json({ message: ` Order ${id} not found` });
     if (foundOrder.status === "Copmleted")
-      return res
-        .status(409)
-        .json({
-          message: `Order ${id} has status of Copmpleted Can't be deleted`,
-        });
+      return res.status(400).json({
+        message: `Orders has status of Copmpleted Can't be deleted`,
+      });
     const foundUser = await UserModel.findById(customerId).exec();
     if (!foundUser)
       return res.json({ message: `User associates with order not found` });

@@ -24,7 +24,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
   try {
     const foundCategory = await CategoriesModel.findOne({
-      category
+      category,
     }).exec();
     if (!foundCategory)
       return res
@@ -32,8 +32,7 @@ export const createProduct = async (req: Request, res: Response) => {
         .json({ message: `Category ${category} not found` });
     foundCategory.products.push(product);
     const result = await foundCategory.save();
-    console.log(result);
-    res.json({ message: `Product ${product.name} has been added` });
+    res.json(result);
   } catch (error: any) {
     res.json({ message: error.message });
   }
@@ -42,21 +41,18 @@ export const createProduct = async (req: Request, res: Response) => {
 // GET /Products/:id
 export const getProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
-
+  const allProducts: TProduct[] = [];
   try {
-    const foundCategory = await CategoriesModel.find().lean();
-    // if (!foundCategory)
-    //   return res.status(404).json({ message: `Category ${id} not found` });
-
-    const foundProduct = foundCategory.map((category) =>
-      category.products.find((product) => product._id === id)
+    const allCategoreis: TCategory[] = await CategoriesModel.find().lean();
+    allCategoreis.map((category) =>
+      category.products.map((product) => {
+        allProducts.push(product);
+      })
     );
-    if (!foundProduct)
-      return res.status(404).json({ message: `Product ${id} not found` });
-
-    res.json(foundProduct);
+    const product = allProducts.find(item => item._id.toString() === id)
+    res.json(product);
   } catch (error: any) {
-    res.json({ messgae: error.message });
+    res.json({ message: error.message });
   }
 };
 
@@ -76,9 +72,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
       category: categoryName,
     }).exec();
 
-    foundCategory?.products.filter(product=> product._id !== id)
+    foundCategory?.products.filter((product) => product._id?.toHexString() !== id);
 
-    await foundCategory?.save()
+    await foundCategory?.save();
     res.json({ message: `Product ${id} has been deleted` });
   } catch (error: any) {
     res.json({ messgae: error.message });
