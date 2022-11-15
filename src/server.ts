@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import cookieParser from 'cookie-parser'
+import cookieParser from "cookie-parser";
 import connectDatabase from "./config/connectToDB";
 import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./config/credentials";
@@ -13,6 +13,7 @@ import {
   usersRouter,
   ordersRouter,
   productsRouter,
+  categoriesRouter,
 } from "./routes";
 
 dotenv.config();
@@ -45,6 +46,9 @@ app.get("/", (req, res) => {
 
 // Auth Routes
 app.use("/auth", authRouter);
+
+//  Categories Routes
+app.use("/categories", categoriesRouter);
 
 //  Products Routes
 app.use("/products", productsRouter);

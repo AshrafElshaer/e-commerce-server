@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
-import { productsSchema } from "./products.schema";
+import { productsSchema, TProduct } from "./products.schema";
 
 const Schema = mongoose.Schema;
+export type TCategory = {
+  category: string;
+  categoryImage: string;
+  products: TProduct[];
+};
 
 const categoriesSchema = new Schema({
   category: {
@@ -14,6 +19,7 @@ const categoriesSchema = new Schema({
   },
   products: {
     type: [productsSchema],
+    default: [],
   },
 });
 

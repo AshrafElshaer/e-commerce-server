@@ -15,7 +15,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 // /order POST add new order
 export const createOrder = async (req: Request, res: Response) => {
   const newOrder = {
-    orderType: req.body.orderType,
+    items: req.body.items,
     customerId: req.body.customerId,
     total: req.body.total,
   };
@@ -27,7 +27,7 @@ export const createOrder = async (req: Request, res: Response) => {
     user?.save();
     res.status(201).json(result);
   } catch (error: any) {
-    console.error(error.message);
+    res.json({ messgae: error.message });
   }
 };
 
@@ -41,10 +41,9 @@ export const getOrder = async (req: Request, res: Response) => {
       return res
         .status(404)
         .json({ message: `Order was not found  id : ${id}` });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.json({ messgae: error.message });
   }
-  // res.send(`GET order id ${id}`);
 };
 
 // /order/:id PUT order by id
@@ -54,7 +53,29 @@ export const updateOrder = (req: Request, res: Response) => {
 };
 
 // /order/:id DELETE order by id
-export const deleteOrder = (req: Request, res: Response) => {
+export const deleteOrder = async (req: Request, res: Response) => {
   const { id } = req.params;
-  res.send(`DELETE order id ${id}`);
+  const { customerId } = req.body;
+
+  try {
+    const foundOrder = await OrdersModel.findById(id).exec();
+    if (!foundOrder)
+      return res.status(404).json({ message: ` Order ${id} not found` });
+    if (foundOrder.status === "Copmleted")
+      return res
+        .status(409)
+        .json({
+          message: `Order ${id} has status of Copmpleted Can't be deleted`,
+        });
+    const foundUser = await UserModel.findById(customerId).exec();
+    if (!foundUser)
+      return res.json({ message: `User associates with order not found` });
+    const orderIdx: number = foundUser.orders.indexOf(id);
+    foundUser.orders.splice(orderIdx, 1);
+    foundUser.save();
+    await foundOrder.delete();
+    res.json({ message: `Order ${id} has been deleted` });
+  } catch (error: any) {
+    res.json({ messgae: error.message });
+  }
 };
