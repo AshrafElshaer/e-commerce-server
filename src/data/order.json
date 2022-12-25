@@ -1,7 +1,6 @@
 {
   "orderId": "orderId",
   "createdAt": "date",
-  "orderType": "pick up / delivery",
   "customer": {
     "id": "id",
     "name": "name",

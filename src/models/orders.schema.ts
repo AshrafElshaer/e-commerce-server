@@ -4,14 +4,21 @@ import { productsSchema, TProduct } from "./products.schema";
 
 const Schema = mongoose.Schema;
 
-export type TOrder = {
-  _id: mongoose.Types.ObjectId;
-  createdAt: Date;
-  customerId: string;
-  items: TProduct[];
-  status: string;
-  total: number;
-};
+// export type TOrder = {
+//   _id: mongoose.Types.ObjectId;
+//   createdAt: Date;
+//   customerId: string;
+//   items: TProduct[];
+//   status: string;
+//   total: number;
+// };
+// export type TCartItemState = {
+//   _id: string;
+//   name: string;
+//   image: string;
+//   price: number;
+//   quantity: number;
+// };
 
 const ordersSchema = new Schema({
   createdAt: {
@@ -22,8 +29,59 @@ const ordersSchema = new Schema({
     type: String,
     required: true,
   },
+  customer: {
+    _id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    address: {
+      street: {
+        type: String,
+        required: true,
+      },
+      suite: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      zipcode: {
+        type: Number,
+        required: true,
+      },
+    },
+  },
   items: {
-    type: [productsSchema],
+    type: [
+      {
+        _id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        image: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     required: true,
   },
   status: {
