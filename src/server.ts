@@ -25,7 +25,7 @@ const PORT = 8080;
 app.use(logger);
 
 // built-in middleware to handle urlencoded form data
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // built-in middleware for json
 app.use(express.json());

@@ -1,6 +1,4 @@
 {
-  "orderId": "orderId",
-  "createdAt": "date",
   "customer": {
     "id": "id",
     "name": "name",

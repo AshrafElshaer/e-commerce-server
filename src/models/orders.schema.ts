@@ -25,10 +25,6 @@ const ordersSchema = new Schema({
     type: Date,
     default: format(new Date(), "dd-MM-yyyy\tHH:mm:ss"),
   },
-  customerId: {
-    type: String,
-    required: true,
-  },
   customer: {
     _id: {
       type: String,

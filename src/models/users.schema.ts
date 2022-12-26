@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { format } from "date-fns";
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +16,7 @@ export type TUser = {
     zipcode: string;
   };
   orders: string[];
+  role: string;
 };
 export const userSchema = new Schema({
   createdAt: {
@@ -25,7 +25,6 @@ export const userSchema = new Schema({
   },
   name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -37,29 +36,29 @@ export const userSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
   },
   address: {
     street: {
       type: String,
-      required: true,
     },
     suite: {
       type: String,
-      required: true,
     },
     city: {
       type: String,
-      required: true,
     },
     zipcode: {
       type: String,
-      required: true,
     },
   },
   orders: {
     type: [String],
     default: [],
+  },
+  role: { type: String, default: "User" },
+  refreshToken: {
+    type: String,
+    default: "",
   },
 });
 
