@@ -9,7 +9,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
   if (!authHeader) return res.sendStatus(401);
   const token = authHeader.split(" ")[1];
 
-  const decoded = JWT.verify(
+  JWT.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET as string,
     (err, decoded) => {
@@ -20,8 +20,6 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
       next();
     }
   );
-
-  console.log(req.email);
 };
 
 export default verifyJWT;

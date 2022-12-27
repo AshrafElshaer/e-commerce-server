@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import JWT from "jsonwebtoken";
+import JWT, { VerifyCallback, VerifyErrors, VerifyOptions } from "jsonwebtoken";
 import UserModel from "../models/users.schema";
 dotenv.config();
 
@@ -91,7 +91,6 @@ export const registerUser = async (req: Request, res: Response) => {
         role: newUser.role,
       },
       process.env.ACCESS_TOKEN_SECRET as string,
-      // process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
 
@@ -119,5 +118,39 @@ export const registerUser = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.json({ message: error.message });
+  }
+};
+
+export const handleRefreshToken = async (req: Request, res: Response) => {
+  const cookies = req.cookies;
+  if (!cookies) return res.sendStatus(401);
+  const refreshToken = cookies.jwt;
+
+  try {
+    const foundUser = await UserModel.findOne({ refreshToken });
+    console.log("user", foundUser?.refreshToken);
+    if (!foundUser) return res.sendStatus(403);
+    JWT.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string,
+      /* @ts-ignore */
+      (err, decoded) => {
+        if (err || foundUser.email !== decoded.email) {
+          console.log("error", err);
+          return res.sendStatus(403);
+        }
+        const accessToken = JWT.sign(
+          {
+            email: foundUser.email,
+            role: foundUser.role,
+          },
+          process.env.ACCESS_TOKEN_SECRET as string,
+          { expiresIn: "15m" }
+        );
+        res.json({ accessToken });
+      }
+    );
+  } catch (err: any) {
+    res.json({ message: err.message });
   }
 };
