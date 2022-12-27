@@ -15,6 +15,7 @@ import {
   productsRouter,
   categoriesRouter,
 } from "./routes";
+import verifyJWT from "./middleweres/verifyJWT";
 
 dotenv.config();
 const app = express();
@@ -44,12 +45,15 @@ app.get("/", (req, res) => {
   res.send("hello from server");
 });
 
+// Public Routes
+
 // Auth Routes
 app.use("/auth", authRouter);
 
 //  Categories Routes
 app.use("/categories", categoriesRouter);
 
+app.use(verifyJWT);
 //  Products Routes
 app.use("/products", productsRouter);
 
