@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import JWT, { VerifyCallback, VerifyErrors, VerifyOptions } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 import UserModel from "../models/users.schema";
 dotenv.config();
 
@@ -11,13 +11,38 @@ export type TNewUser = {
   role: string;
   refreshToken: string;
 };
+
+export const logoutUser = async (req: Request, res: Response) => {
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(204); //No content
+  const refreshToken = cookies.jwt;
+
+  try {
+    const foundUser = await UserModel.findOne({ refreshToken }).exec();
+    if (!foundUser) {
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+      return res.sendStatus(204);
+    }
+    foundUser.refreshToken = "";
+    await foundUser.save();
+
+    res.clearCookie("jwt", { httpOnly: true, sameSite: "none", secure: true });
+    res.sendStatus(204);
+  } catch (err: any) {
+    res.json({ message: err.message });
+  }
+};
 // POST /loging
 
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const foundUser = await UserModel.findOne({ email });
+    const foundUser = await UserModel.findOne({ email }).exec();
     if (!foundUser)
       return res.status(400).json({
         message: `${email} doesn't exist please sign up`,
@@ -36,7 +61,6 @@ export const loginUser = async (req: Request, res: Response) => {
         role: foundUser.role,
       },
       process.env.ACCESS_TOKEN_SECRET as string,
-      // process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
 
@@ -55,6 +79,8 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
+      // secure : true ,
+      sameSite: "none",
     });
 
     res.json({
@@ -73,7 +99,7 @@ export const registerUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const foundUser = await UserModel.findOne({ email });
+    const foundUser = await UserModel.findOne({ email }).exec();
     if (foundUser)
       return res.status(409).json({
         message: `Email address : ${foundUser.email} already has an active account try to login`,
@@ -108,6 +134,8 @@ export const registerUser = async (req: Request, res: Response) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
+      // secure : true ,
+      sameSite: "none",
     });
 
     res.status(201).json({
@@ -120,6 +148,8 @@ export const registerUser = async (req: Request, res: Response) => {
     res.json({ message: error.message });
   }
 };
+
+// POST /refresh
 
 export const handleRefreshToken = async (req: Request, res: Response) => {
   const cookies = req.cookies;
