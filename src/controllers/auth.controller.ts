@@ -143,10 +143,14 @@ export const registerUser = async (req: Request, res: Response) => {
     });
 
     res.status(201).json({
-      ...result.toObject(),
-      accessToken,
-      refreshToken: undefined,
-      password: undefined,
+      userInfo: {
+        ...result.toObject(),
+        refreshToken: undefined,
+        password: undefined,
+        __v: undefined,
+        createdAt: undefined,
+      },
+      token: accessToken,
     });
   } catch (error: any) {
     res.json({ message: error.message });
