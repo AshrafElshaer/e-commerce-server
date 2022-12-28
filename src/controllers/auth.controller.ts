@@ -45,14 +45,14 @@ export const loginUser = async (req: Request, res: Response) => {
     const foundUser = await UserModel.findOne({ email }).exec();
     if (!foundUser)
       return res.status(400).json({
-        message: `${email} doesn't exist please sign up`,
+        message: `Email provided doesn't exist please sign up`,
       });
 
-    const matchPassword = bcrypt.compare(password, foundUser.password);
+    const matchPassword = await bcrypt.compare(password, foundUser.password);
 
     if (!matchPassword)
       return res.status(400).json({
-        message: `Incorrect password`,
+        message: `Password Provided is Incorrect `,
       });
 
     const accessToken = JWT.sign(
@@ -80,14 +80,18 @@ export const loginUser = async (req: Request, res: Response) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       // secure : true ,
-      sameSite: "none",
+      // sameSite: "none",
     });
 
     res.json({
-      ...foundUser.toObject(),
-      accessToken,
-      refreshToken: undefined,
-      password: undefined,
+      userInfo: {
+        ...foundUser.toObject(),
+        refreshToken: undefined,
+        password: undefined,
+        __v: undefined,
+        createdAt: undefined,
+      },
+      token: accessToken,
     });
   } catch (error: any) {
     res.json({ message: error.message });

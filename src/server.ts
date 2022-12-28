@@ -50,10 +50,10 @@ app.get("/", (req, res) => {
 // Auth Routes
 app.use("/auth", authRouter);
 
+app.use(verifyJWT);
 //  Categories Routes
 app.use("/categories", categoriesRouter);
 
-app.use(verifyJWT);
 //  Products Routes
 app.use("/products", productsRouter);
 
