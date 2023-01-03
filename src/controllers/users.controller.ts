@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import UserModel from "../models/users.schema";
 import bcrypt from "bcrypt";
+
 // GET /users
 export const getAllusers = async (req: Request, res: Response) => {
   try {
-    const users = await UserModel.find().select("-password");
+    const users = await UserModel.find().select("-password").exec();
     res.json(users);
   } catch (error: any) {
     res.json({ messgae: error.message });
@@ -30,8 +31,7 @@ export const getuser = async (req: Request, res: Response) => {
 // PUT /users/:id
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, email, password, phone, address } = req.body;
-  const hashPassword = await bcrypt.hash(password, 10);
+  const { name, email, password, phoneNumber, address, newPassword } = req.body;
 
   try {
     const foundUser = await UserModel.findById(id).exec();
@@ -40,16 +40,29 @@ export const updateUser = async (req: Request, res: Response) => {
         .status(404)
         .json({ message: `User with ID : ${id} not found` });
 
-    foundUser.name = name;
-    foundUser.email = email;
-    foundUser.password = hashPassword;
-    foundUser.phone = phone;
-    foundUser.address = address;
+    const matchPassword = await bcrypt.compare(password, foundUser.password);
+
+    if (!matchPassword)
+      return res
+        .status(400)
+        .json({ message: "Password is incorrect please try again" });
+        
+    if (name) foundUser.name = name;
+    if (email) foundUser.email = email;
+    if (newPassword) foundUser.password = await bcrypt.hash(newPassword, 10);
+    if (phoneNumber) foundUser.phone = phoneNumber;
+    if (address) foundUser.address = address;
 
     await foundUser.save();
-    res
-      .status(201)
-      .json({ message: `User ${name} information has been updated` });
+    res.status(201).json({
+      userInfo: {
+        ...foundUser.toObject(),
+        refreshToken: undefined,
+        password: undefined,
+        __v: undefined,
+        createdAt: undefined,
+      },
+    });
   } catch (error: any) {
     res.json({ message: error.message });
   }

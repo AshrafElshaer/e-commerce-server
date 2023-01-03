@@ -13,7 +13,7 @@ const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     token,
     process.env.ACCESS_TOKEN_SECRET as string,
     (err, decoded) => {
-      if (err) return res.sendStatus(403);
+      if (err) return res.status(403).json({ err });
       /* @ts-ignore */
       if (decoded) req.email = decoded.email;
 

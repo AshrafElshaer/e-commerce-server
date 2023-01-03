@@ -141,7 +141,7 @@ export const registerUser = async (req: Request, res: Response) => {
       // secure : true ,
       sameSite: "none",
     });
-
+//
     res.status(201).json({
       userInfo: {
         ...result.toObject(),

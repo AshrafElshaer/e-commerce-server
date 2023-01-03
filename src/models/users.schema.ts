@@ -41,13 +41,14 @@ export const userSchema = new Schema({
     street: {
       type: String,
     },
-    suite: {
-      type: String,
-    },
+
     city: {
       type: String,
     },
     zipcode: {
+      type: String,
+    },
+    country: {
       type: String,
     },
   },
