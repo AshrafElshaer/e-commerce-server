@@ -55,6 +55,12 @@ export const updateUser = async (req: Request, res: Response) => {
           .status(400)
           .json({ message: "Password is incorrect please try again" });
     }
+    if (
+      overWritePassword &&
+      overWritePassword !== process.env.OVERWRITE_PASSWORD
+    ) {
+      return res.sendStatus(403);
+    }
 
     if (name) foundUser.name = name;
     if (email) foundUser.email = email;

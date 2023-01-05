@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const ordersSchema = new Schema({
   createdAt: {
     type: Date,
-    default: format(new Date(), "dd-MM-yyyy\tHH:mm:ss"),
+    default: Date.now(),
   },
   customer: {
     id: {
