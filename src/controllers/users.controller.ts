@@ -31,7 +31,15 @@ export const getuser = async (req: Request, res: Response) => {
 // PUT /users/:id
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, email, password, phoneNumber, address, newPassword } = req.body;
+  const {
+    name,
+    email,
+    password,
+    phoneNumber,
+    address,
+    newPassword,
+    overWritePassword,
+  } = req.body;
 
   try {
     const foundUser = await UserModel.findById(id).exec();
@@ -40,13 +48,14 @@ export const updateUser = async (req: Request, res: Response) => {
         .status(404)
         .json({ message: `User with ID : ${id} not found` });
 
-    const matchPassword = await bcrypt.compare(password, foundUser.password);
+    if (!overWritePassword) {
+      const matchPassword = await bcrypt.compare(password, foundUser.password);
+      if (!matchPassword)
+        return res
+          .status(400)
+          .json({ message: "Password is incorrect please try again" });
+    }
 
-    if (!matchPassword)
-      return res
-        .status(400)
-        .json({ message: "Password is incorrect please try again" });
-        
     if (name) foundUser.name = name;
     if (email) foundUser.email = email;
     if (newPassword) foundUser.password = await bcrypt.hash(newPassword, 10);

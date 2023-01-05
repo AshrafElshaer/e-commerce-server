@@ -16,7 +16,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 export const createOrder = async (req: Request, res: Response) => {
   const newOrder = req.body;
   try {
-    const user = await UserModel.findById(newOrder.customerId);
+    const user = await UserModel.findById(newOrder.customer.id).exec();
     const result = await OrdersModel.create(newOrder);
     user?.orders.push(result._id.toString());
     user?.save();

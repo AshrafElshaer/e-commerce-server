@@ -1,24 +1,8 @@
 import mongoose from "mongoose";
 import { format } from "date-fns";
-import { productsSchema, TProduct } from "./products.schema";
+import { productsSchema } from "./products.schema";
 
 const Schema = mongoose.Schema;
-
-// export type TOrder = {
-//   _id: mongoose.Types.ObjectId;
-//   createdAt: Date;
-//   customerId: string;
-//   items: TProduct[];
-//   status: string;
-//   total: number;
-// };
-// export type TCartItemState = {
-//   _id: string;
-//   name: string;
-//   image: string;
-//   price: number;
-//   quantity: number;
-// };
 
 const ordersSchema = new Schema({
   createdAt: {
@@ -26,7 +10,7 @@ const ordersSchema = new Schema({
     default: format(new Date(), "dd-MM-yyyy\tHH:mm:ss"),
   },
   customer: {
-    _id: {
+    id: {
       type: String,
       required: true,
     },
@@ -39,7 +23,7 @@ const ordersSchema = new Schema({
         type: String,
         required: true,
       },
-      suite: {
+      country: {
         type: String,
         required: true,
       },
@@ -84,7 +68,10 @@ const ordersSchema = new Schema({
     type: String,
     default: "Pending",
   },
-  total: { type: Number, required: true },
+
+  total: { type: String, required: true },
+  VAT: { type: String, required: true },
+  grandTotal: { type: String, required: true },
 });
 
 const OrdersModel = mongoose.model("orders", ordersSchema);

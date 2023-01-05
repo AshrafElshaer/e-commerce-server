@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-
 export type TProduct = {
   _id: mongoose.Types.ObjectId;
   slug: string;
@@ -22,6 +21,7 @@ export type TProduct = {
   count: number;
   sold: number;
 };
+
 export const productsSchema = new Schema({
   slug: {
     type: String,
@@ -73,6 +73,6 @@ export const productsSchema = new Schema({
   },
 });
 
-const ProductsModel = mongoose.model("products", productsSchema);
+// const ProductsModel = mongoose.model("products", productsSchema);
 
-export default ProductsModel;
+// export default ProductsModel;

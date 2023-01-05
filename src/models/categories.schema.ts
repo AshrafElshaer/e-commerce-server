@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-import { productsSchema, TProduct } from "./products.schema";
+import { productsSchema , TProduct} from "./products.schema";
+
+
 
 const Schema = mongoose.Schema;
 export type TCategory = {
