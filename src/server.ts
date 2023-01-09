@@ -14,7 +14,9 @@ import {
   ordersRouter,
   productsRouter,
   categoriesRouter,
+  supportRouter
 } from "./routes";
+
 import verifyJWT from "./middleweres/verifyJWT";
 
 dotenv.config();
@@ -50,7 +52,7 @@ app.get("/", (req, res) => {
 // Auth Routes
 app.use("/auth", authRouter);
 
-app.use(verifyJWT);
+// app.use(verifyJWT);
 //  Categories Routes
 app.use("/categories", categoriesRouter);
 
@@ -62,6 +64,9 @@ app.use("/orders", ordersRouter);
 
 // Users Routes
 app.use("/users", usersRouter);
+
+//Support 
+app.use("/support", supportRouter);
 
 // error handler
 app.use(errorHandler);
