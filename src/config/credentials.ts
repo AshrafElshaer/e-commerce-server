@@ -10,7 +10,7 @@ export const credentials = (
   /* @ts-ignore*/
 
   res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+  res.header("Access-Control-Allow-Origin", "*");
 
   next();
 };
