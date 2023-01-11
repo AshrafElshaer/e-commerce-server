@@ -40,7 +40,7 @@ app.use(credentials);
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (origin === "https://aesthetic-paprenjak-2c817c.netlify.app/") {
+      if (origin === process.env.CLIENT_URL) {
         callback(null, true);
       }
     },
