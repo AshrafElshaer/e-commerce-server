@@ -39,7 +39,7 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(
   cors({
-    origin: "*",
+    origin: "https://aesthetic-paprenjak-2c817c.netlify.app/",
     credentials: true,
   })
 );
