@@ -8,9 +8,11 @@ export const credentials = (
   next: NextFunction
 ) => {
   /* @ts-ignore*/
-
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://radiant-marigold-3c2557.netlify.app"
+  );
 
   next();
 };
