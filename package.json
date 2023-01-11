@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node build/server.js",
-    "server": "nodemon build/server"
+    "build": "tsc",
+    "start": "node ./build/server.js",
+    "server": "nodemon ./build/server"
   },
   "keywords": [],
   "author": "",
