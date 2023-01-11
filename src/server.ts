@@ -14,10 +14,11 @@ import {
   ordersRouter,
   productsRouter,
   categoriesRouter,
-  supportRouter
+  supportRouter,
 } from "./routes";
 
 import verifyJWT from "./middleweres/verifyJWT";
+import { allowedOrigins } from "./config/allowedOrgins";
 
 dotenv.config();
 const app = express();
@@ -31,14 +32,19 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 
 // built-in middleware for json
-app.use(express.json());
+app.use(express.json({ limit: "100MB" }));
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
 app.use(credentials);
 
 // Cross Origin Resource Sharing
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:4173"],
+    credentials: true,
+  })
+);
 
 //middleware for cookies
 app.use(cookieParser());
@@ -65,7 +71,7 @@ app.use("/orders", ordersRouter);
 // Users Routes
 app.use("/users", usersRouter);
 
-//Support 
+//Support
 app.use("/support", supportRouter);
 
 // error handler

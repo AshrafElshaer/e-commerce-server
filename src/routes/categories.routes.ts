@@ -12,7 +12,7 @@ const router = express.Router();
 
 router
   .get("/", getAllCategories)
-  .post("/", verifyJWT, createCategory)
+  .post("/", createCategory)
   .get("/:categoryName", getCategory)
   .put("/:categoryName", verifyJWT, verifyJWT, updateCategory)
   .delete("/:categoryName", verifyJWT, deleteCategory);

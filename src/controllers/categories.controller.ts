@@ -46,7 +46,10 @@ export const createCategory = async (req: Request, res: Response) => {
       .lean()
       .exec();
 
-    if(foundCategory) return res.status(400).json({message : `Category ${category.category} already exists`})
+    if (foundCategory)
+      return res
+        .status(400)
+        .json({ message: `Category ${category.category} already exists` });
 
     const result = await CategoriesModel.create(category);
     res.status(201).json(result);
