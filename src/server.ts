@@ -39,12 +39,14 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(
   cors({
+    credentials: true,
     origin: (origin, callback) => {
       if (origin === process.env.CLIENT_URL) {
         callback(null, true);
+      } else {
+        throw new Error("not allowed by cors");
       }
     },
-    credentials: true,
   })
 );
 
