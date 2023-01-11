@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import connectDatabase from "./config/connectToDB";
-import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./config/credentials";
 import { errorHandler } from "./middleweres/errorHandler";
 import { logger } from "./middleweres/logEvents";
@@ -18,7 +17,6 @@ import {
 } from "./routes";
 
 import verifyJWT from "./middleweres/verifyJWT";
-import { allowedOrigins } from "./config/allowedOrgins";
 
 dotenv.config();
 const app = express();
@@ -41,7 +39,7 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:4173"],
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
@@ -49,18 +47,15 @@ app.use(
 //middleware for cookies
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("hello from server");
-});
-
 // Public Routes
 
 // Auth Routes
 app.use("/auth", authRouter);
 
-// app.use(verifyJWT);
-//  Categories Routes
 app.use("/categories", categoriesRouter);
+
+app.use(verifyJWT);
+//  Categories Routes
 
 //  Products Routes
 app.use("/products", productsRouter);
