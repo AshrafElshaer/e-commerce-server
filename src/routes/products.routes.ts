@@ -11,10 +11,10 @@ import { verifyRole } from "../middleweres/verifyRole";
 const router = express.Router();
 
 router
-  .get("/", verifyJWT, verifyRole("admin"), getAllProducts)
-  .post("/", verifyJWT, verifyRole("admin"), createProduct)
+  .get("/", verifyRole("admin"), getAllProducts)
+  .post("/", verifyRole("admin"), createProduct)
   .get("/:id", getProduct)
-  .put("/:id", verifyJWT, verifyRole("admin"), updateProduct)
-  .delete("/:id", verifyJWT, verifyRole("admin"), deleteProduct);
+  .put("/:id", verifyRole("admin"), updateProduct)
+  .delete("/:id", verifyRole("admin"), deleteProduct);
 
 export default router;

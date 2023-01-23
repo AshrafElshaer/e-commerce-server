@@ -53,11 +53,11 @@ app.use(cookieParser());
 
 // Auth Routes
 app.use("/auth", authRouter);
-app.use(verifyJWT);
 
-app.use("/categories", categoriesRouter);
 
 //  Categories Routes
+app.use("/categories", categoriesRouter);
+app.use(verifyJWT);
 
 //  Products Routes
 app.use("/products", productsRouter);

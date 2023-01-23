@@ -11,9 +11,9 @@ import { verifyRole } from "../middleweres/verifyRole";
 const router = express.Router();
 
 router
-  .get("/", verifyJWT, verifyRole("admin"), getAllusers)
-  .get("/:id", verifyJWT, verifyRole("admin"), getuser)
-  .put("/:id", verifyJWT, verifyRole("admin"), updateUser)
-  .delete("/:id", verifyJWT, verifyRole("admin"), deleteuser);
+  .get("/", verifyRole("admin"), getAllusers)
+  .get("/:id", verifyRole("admin"), getuser)
+  .put("/:id", verifyRole("admin"), updateUser)
+  .delete("/:id", verifyRole("admin"), deleteuser);
 
 export default router;
