@@ -21,7 +21,7 @@ import verifyJWT from "./middleweres/verifyJWT";
 dotenv.config();
 const app = express();
 connectDatabase();
-const PORT =  5500;
+const PORT =  process.env.PORT;
 
 // loging incoming requests
 app.use(logger);
