@@ -6,13 +6,15 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller";
+import verifyJWT from "../middleweres/verifyJWT";
+import { verifyRole } from "../middleweres/verifyRole";
 const router = express.Router();
 
 router
-  .get("/", getAllProducts)
-  .post("/", createProduct)
+  .get("/", verifyJWT, verifyRole("admin"), getAllProducts)
+  .post("/", verifyJWT, verifyRole("admin"), createProduct)
   .get("/:id", getProduct)
-  .put("/:id", updateProduct)
-  .delete("/:id", deleteProduct);
+  .put("/:id", verifyJWT, verifyRole("admin"), updateProduct)
+  .delete("/:id", verifyJWT, verifyRole("admin"), deleteProduct);
 
 export default router;

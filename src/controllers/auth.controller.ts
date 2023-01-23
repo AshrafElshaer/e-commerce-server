@@ -79,7 +79,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
-      secure : true ,
+      secure: true,
       sameSite: "none",
     });
 
@@ -100,7 +100,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 // POST /register
 export const registerUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password} = req.body;
 
   try {
     const foundUser = await UserModel.findOne({ email }).exec();
@@ -138,10 +138,10 @@ export const registerUser = async (req: Request, res: Response) => {
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
-      secure : true ,
+      secure: true,
       sameSite: "none",
     });
-//
+    //
     res.status(201).json({
       userInfo: {
         ...result.toObject(),
