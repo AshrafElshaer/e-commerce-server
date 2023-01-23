@@ -21,7 +21,7 @@ import verifyJWT from "./middleweres/verifyJWT";
 dotenv.config();
 const app = express();
 connectDatabase();
-const PORT = process.env.PORT;
+const PORT =  5500;
 
 // loging incoming requests
 app.use(logger);
@@ -53,10 +53,10 @@ app.use(cookieParser());
 
 // Auth Routes
 app.use("/auth", authRouter);
+app.use(verifyJWT);
 
 app.use("/categories", categoriesRouter);
 
-app.use(verifyJWT);
 //  Categories Routes
 
 //  Products Routes

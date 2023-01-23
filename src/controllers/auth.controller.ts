@@ -36,7 +36,7 @@ export const logoutUser = async (req: Request, res: Response) => {
     res.json({ message: err.message });
   }
 };
-// POST /loging
+// POST /login
 
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
