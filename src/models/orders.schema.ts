@@ -69,9 +69,9 @@ const ordersSchema = new Schema({
     default: "Pending",
   },
 
-  total: { type: String, required: true },
-  VAT: { type: String, required: true },
-  grandTotal: { type: String, required: true },
+  total: { type: Number, required: true },
+  VAT: { type: Number, required: true },
+  grandTotal: { type: Number, required: true },
 });
 
 const OrdersModel = mongoose.model("orders", ordersSchema);
